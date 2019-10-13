@@ -1,0 +1,290 @@
+
+==========================================================Question 1===========================================================
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| college            |
+| college_database   |
+| college_hostel     |
+| company_database   |
+| employee           |
+| mysql              |
+| performance_schema |
+| shop               |
+| sys                |
+| test               |
++--------------------+
+11 rows in set (0.00 sec)
+
+mysql> USE college;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++--------------------+
+| Tables_in_college  |
++--------------------+
+| college_individual |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM college_individual;
++----+-----------------+----------------------+-----------+
+| id | name            | email                | mentor_id |
++----+-----------------+----------------------+-----------+
+|  1 | Mayank Pathak   | mayank@gmail.com     |      NULL |
+|  2 | Ankit Chaudhary | ankit@outlook.com    |         1 |
+|  3 | Vijay Saini     | vijay@gmail.com      |      NULL |
+|  4 | Harish Solanki  | harish@outlook.com   |         1 |
+|  5 | Elon Musk       | elon@gmail.com       |      NULL |
+|  6 | Himanshu Namdev | himanshu@outlook.com |         5 |
+|  7 | Steve Jobs      | steve@gmail.com      |      NULL |
+|  8 | Chetan Chauhan  | chetan@outlook.com   |         7 |
+|  9 | Nitin Chauhan   | nitin@gmail.com      |      NULL |
+| 10 | Tushar Bohra    | tushar@gmail.com     |      NULL |
+| 11 | Khushi Negi     | khushi@outlook.com   |        10 |
+| 12 | Devina          | devina@outlook.com   |         3 |
+| 13 | Sumit Kumar     | sumit@outlook.com    |         3 |
+| 14 | Jeewan Kala     | jeewan@outlook.com   |         7 |
+| 15 | Himanshu Miyan  | himanshu@outlook.com |         5 |
+| 16 | Abhay Singh     | abhay@gmail.com      |         3 |
+| 17 | Kirti Chauhan   | kirti@gmail.com      |         7 |
+| 18 | Anuj Saini      | anuj@gmail.com       |      NULL |
+| 19 | Anchal Kala     | anchal@gmail.com     |        18 |
+| 20 | Mohit Notiyal   | mohit@gmail.com      |        18 |
++----+-----------------+----------------------+-----------+
+20 rows in set (0.00 sec)
+
+Question 1.1 :- List all mentee’s in alphabetical order.
+mysql> SELECT name FROM college_individual WHERE mentor_id IS NOT NULL ORDER BY name;
++-----------------+
+| name            |
++-----------------+
+| Abhay Singh     |
+| Anchal Kala     |
+| Ankit Chaudhary |
+| Chetan Chauhan  |
+| Devina          |
+| Harish Solanki  |
+| Himanshu Miyan  |
+| Himanshu Namdev |
+| Jeewan Kala     |
+| Khushi Negi     |
+| Kirti Chauhan   |
+| Mohit Notiyal   |
+| Sumit Kumar     |
++-----------------+
+13 rows in set (0.02 sec)
+
+Question 1.2 :- List all mentee’s along with their mentors.
+mysql> SELECT c1.name, (SELECT name FROM college_individual WHERE id = c1.mentor_id) AS `MENTOR` FROM college_individual AS c1, college_individual AS c2 WHERE c1.id = c2.id AND c1.mentor_id IS NOT NULL; 
++-----------------+---------------+
+| name            | MENTOR        |
++-----------------+---------------+
+| Ankit Chaudhary | Mayank Pathak |
+| Harish Solanki  | Mayank Pathak |
+| Himanshu Namdev | Elon Musk     |
+| Chetan Chauhan  | Steve Jobs    |
+| Khushi Negi     | Tushar Bohra  |
+| Devina          | Vijay Saini   |
+| Sumit Kumar     | Vijay Saini   |
+| Jeewan Kala     | Steve Jobs    |
+| Himanshu Miyan  | Elon Musk     |
+| Abhay Singh     | Vijay Saini   |
+| Kirti Chauhan   | Steve Jobs    |
+| Anchal Kala     | Anuj Saini    |
+| Mohit Notiyal   | Anuj Saini    |
++-----------------+---------------+
+13 rows in set (0.04 sec)
+
+Question 1.3 :- List all mentee’s whose mentor’s are using `@gmail` email domain.
+mysql> SELECT name FROM college_individual WHERE mentor_id IS NOT NULL AND email LIKE '%@gmail%';
++---------------+
+| name          |
++---------------+
+| Abhay Singh   |
+| Kirti Chauhan |
+| Anchal Kala   |
+| Mohit Notiyal |
++---------------+
+4 rows in set (0.00 sec)
+
+=========================================================Question 2=============================================================
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| college            |
+| college_database   |
+| college_hostel     |
+| company_database   |
+| employee           |
+| mysql              |
+| performance_schema |
+| shop               |
+| sys                |
+| test               |
++--------------------+
+11 rows in set (0.00 sec)
+
+mysql> USE shop;
+
+Database changed
+mysql> SHOW TABLES;
++----------------+
+| Tables_in_shop |
++----------------+
+| customer       |
+| sales          |
+| seller         |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM customer;
++----+------------+-----------+------------------+---------------+---------------------+
+| id | first_name | last_name | email            | date_of_birth | create_at           |
++----+------------+-----------+------------------+---------------+---------------------+
+|  1 | Mayank     | Pathak    | mayank@gmail.com | 1988-01-14    | 2019-10-12 16:44:41 |
+|  2 | Ankit      | Chaudhary | ankit@gmail.com  | 1991-12-04    | 2019-10-12 16:45:32 |
+|  3 | Vijay      | Saini     | vijay@gmail.com  | 1967-04-29    | 2019-10-12 16:46:18 |
+|  4 | Harish     | Solanki   | harish@gmail.com | 1973-07-11    | 2019-10-12 16:47:07 |
+|  5 | Nitin      | Chauhan   | nitin@gmail.com  | 1998-01-09    | 2019-10-12 16:48:15 |
++----+------------+-----------+------------------+---------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM sales;
++----+-------------+-----------+------------+--------+
+| id | customer_id | seller_id | date       | amount |
++----+-------------+-----------+------------+--------+
+|  1 |           1 |         3 | 2017-01-14 |   2738 |
+|  2 |           1 |         2 | 2017-12-04 |   9341 |
+|  3 |           3 |         1 | 2017-04-29 |   8239 |
+|  4 |           4 |         2 | 2017-07-11 |   4752 |
+|  5 |           1 |         2 | 2017-06-13 |   4732 |
+|  6 |           5 |         1 | 2017-01-21 |   3732 |
+|  7 |           3 |         4 | 2017-02-12 |   6543 |
+|  8 |           5 |         1 | 2017-08-22 |   5543 |
+|  9 |           2 |         3 | 2017-03-02 |   5583 |
+| 10 |           3 |         1 | 2017-05-22 |   3583 |
+| 11 |           5 |         2 | 2017-11-12 |   6583 |
+| 12 |           4 |         1 | 2017-10-05 |   5183 |
+| 13 |           2 |         4 | 2017-10-25 |   4183 |
+| 14 |           1 |         3 | 2017-12-15 |   2383 |
+| 15 |           4 |         5 | 2017-07-21 |   6383 |
++----+-------------+-----------+------------+--------+
+15 rows in set (0.00 sec)
+
+mysql> SELECT * FROM seller;
++----+-------------------+--------+
+| id | name              | gender |
++----+-------------------+--------+
+|  1 | Pooja Pathak      | female |
+|  2 | Chandan Chaudhary | male   |
+|  3 | Saloni Saini      | female |
+|  4 | Sandeep Solanki   | male   |
+|  5 | Sagar Kaimwal     | male   |
++----+-------------------+--------+
+5 rows in set (0.00 sec)
+
+Question 2.1 :- List all sales with the following info
+                        ○ Customer Name (Name format - <lastname> , <firstname>)
+                        ○ Seller Name
+                        ○ Amount
+
+mysql> SELECT CONCAT(last_name,',',first_name) AS `Customer Name`, seller.name, sales.amount FROM customer, seller, sales WHERE customer.id = customer_id AND seller.id = seller_id;
++-----------------+-------------------+--------+
+| Customer Name   | name              | amount |
++-----------------+-------------------+--------+
+| Saini,Vijay     | Pooja Pathak      |   8239 |
+| Saini,Vijay     | Pooja Pathak      |   3583 |
+| Solanki,Harish  | Pooja Pathak      |   5183 |
+| Chauhan,Nitin   | Pooja Pathak      |   3732 |
+| Chauhan,Nitin   | Pooja Pathak      |   5543 |
+| Pathak,Mayank   | Chandan Chaudhary |   9341 |
+| Pathak,Mayank   | Chandan Chaudhary |   4732 |
+| Solanki,Harish  | Chandan Chaudhary |   4752 |
+| Chauhan,Nitin   | Chandan Chaudhary |   6583 |
+| Pathak,Mayank   | Saloni Saini      |   2738 |
+| Pathak,Mayank   | Saloni Saini      |   2383 |
+| Chaudhary,Ankit | Saloni Saini      |   5583 |
+| Chaudhary,Ankit | Sandeep Solanki   |   4183 |
+| Saini,Vijay     | Sandeep Solanki   |   6543 |
+| Solanki,Harish  | Sagar Kaimwal     |   6383 |
++-----------------+-------------------+--------+
+15 rows in set (0.13 sec)
+
+Question 2.2 :- The list should be sorted the customer first name and also by the sale amount, in
+                ascending order.
+
+mysql> SELECT customer.first_name, sales.amount FROM customer, sales WHERE customer.id = sales.customer_id ORDER BY customer.first_name, sales.amount;
++------------+--------+
+| first_name | amount |
++------------+--------+
+| Ankit      |   4183 |
+| Ankit      |   5583 |
+| Harish     |   4752 |
+| Harish     |   5183 |
+| Harish     |   6383 |
+| Mayank     |   2383 |
+| Mayank     |   2738 |
+| Mayank     |   4732 |
+| Mayank     |   9341 |
+| Nitin      |   3732 |
+| Nitin      |   5543 |
+| Nitin      |   6583 |
+| Vijay      |   3583 |
+| Vijay      |   6543 |
+| Vijay      |   8239 |
++------------+--------+
+15 rows in set (0.01 sec)
+
+===============================================================Question 3====================================================
+
+Question 3.1 :- List the customers, with their total sale amount. The list should be ordered by the
+                total sale amount.
+
+mysql> SELECT (SELECT first_name FROM customer WHERE id = customer_id) AS `CUSTOMER NAME`, SUM(amount) AS `TOTAL SALE AMOUNT` FROM sales GROUP BY customer_id;
++---------------+-------------------+
+| CUSTOMER NAME | TOTAL SALE AMOUNT |
++---------------+-------------------+
+| Mayank        |             19194 |
+| Ankit         |              9766 |
+| Vijay         |             18365 |
+| Harish        |             16318 |
+| Nitin         |             15858 |
++---------------+-------------------+
+5 rows in set (0.00 sec)
+
+========================================================Question 4============================================================
+
+Question 4.1 :- List all the sales, which were sold by a female to a person who is older than the
+                age 35.
+
+mysql> SELECT customer_id, seller_id, date, amount FROM sales WHERE seller_id IN (SELECT id FROM seller WHERE gender = 'female') AND customer_id IN (SELECT id FROM customer WHERE ( YEAR(NOW()) - YEAR(date_of_birth)) > 35);
++-------------+-----------+------------+--------+
+| customer_id | seller_id | date       | amount |
++-------------+-----------+------------+--------+
+|           3 |         1 | 2017-04-29 |   8239 |
+|           3 |         1 | 2017-05-22 |   3583 |
+|           4 |         1 | 2017-10-05 |   5183 |
++-------------+-----------+------------+--------+
+3 rows in set (0.00 sec)
+
+Question 4.2 :- The list should be sorted by amount of sale.
+
+mysql> SELECT customer_id, seller_id, date, amount FROM sales WHERE seller_id IN (SELECT id FROM seller WHERE gender = 'female') AND customer_id IN (SELECT id FROM customer WHERE ( YEAR(NOW()) - YEAR(date_of_birth)) > 35) ORDER BY amount;
++-------------+-----------+------------+--------+
+| customer_id | seller_id | date       | amount |
++-------------+-----------+------------+--------+
+|           3 |         1 | 2017-05-22 |   3583 |
+|           4 |         1 | 2017-10-05 |   5183 |
+|           3 |         1 | 2017-04-29 |   8239 |
++-------------+-----------+------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> exit;
+
