@@ -218,11 +218,40 @@ GROUP BY event_day, emp_id;
 ====================                      DAY 9 (Control of Flow)
 
 Solution 1
+
+SELECT stock_name, (SUM(if(operation = 'Sell', price, 0))  -  SUM(if(operation = 'Buy', price, 0))) AS  capital_gain_loss 
+FROM Stocks
+GROUP BY stock_name;
+
+----------
+
+SELECT stock_name,
+SUM(
+    CASE 
+        WHEN operation = 'Buy' THEN -price
+        ELSE price
+    END 
+) AS capital_gain_loss
+FROM Stocks
+GROUP By stock_name;
+
 Solution 2 
+
+SELECT Users.name, if(SUM(distance) IS NULL, 0, SUM(distance))AS travelled_distance
+FROM Users LEFT JOIN Rides 
+ON Users.id = Rides.user_id
+GROUP BY Users.id
+ORDER BY travelled_distance DESC, Users.name;
+
+-----------
+
+SELECT Users.name, ifnull(SUM(distance), 0) AS travelled_distance
+FROM Users LEFT JOIN Rides 
+ON Users.id = Rides.user_id
+GROUP BY Users.id
+ORDER BY travelled_distance DESC, Users.name;
+
 Solution 3 
-Be careful if you use where in join here you would lose the Null occurence of orders thus zero number of orders won't show up in the final table.
-The upper one is wrong because although left join table first but the where clause will eliminate the 2019 orders. i.e. no 3 and 4 on the output.
-instead the lower one is correct. the year codition in on the join clause there will have no orders for buyer 3 and 4 but since it is left join the user 3 and 4 are still in the user table.
 
 select u.user_id as buyer_id,join_date,ifnull(count(order_id),0) as orders_in_2019
 from Users u left join Orders o
@@ -240,6 +269,15 @@ left join orders o
 on u.user_id = o.buyer_id
 and year(o.order_date) = '2019'
 group by u.user_id 
+
+
+#Be careful if you use where in join here you would lose the Null occurence of orders thus zero number of orders won't show up in the final table.
+
+#The upper one is wrong because although left join table first but the where clause will eliminate the 2019 orders. i.e. no 3 and 4 on the output.
+
+#instead the lower one is correct. the year codition in on the join clause there will have no orders for buyer 3 and 4 but since it is left join the user 3 and 4 are still in the user table.
+
+
 
 
  ====================                       DAY 10 ()
