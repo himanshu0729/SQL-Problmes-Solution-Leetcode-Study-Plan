@@ -220,7 +220,27 @@ GROUP BY event_day, emp_id;
 Solution 1
 Solution 2 
 Solution 3 
-Solution 4 
+Be careful if you use where in join here you would lose the Null occurence of orders thus zero number of orders won't show up in the final table.
+The upper one is wrong because although left join table first but the where clause will eliminate the 2019 orders. i.e. no 3 and 4 on the output.
+instead the lower one is correct. the year codition in on the join clause there will have no orders for buyer 3 and 4 but since it is left join the user 3 and 4 are still in the user table.
+
+select u.user_id as buyer_id,join_date,ifnull(count(order_id),0) as orders_in_2019
+from Users u left join Orders o
+on u.user_id = o.buyer_id
+where year(order_date)='2019'
+group by u.user_id
+
+
+
+SELECT u.user_id as buyer_id,
+u.join_date,
+ifnull(count(o.order_id),0) as orders_in_2019
+from users u
+left join orders o
+on u.user_id = o.buyer_id
+and year(o.order_date) = '2019'
+group by u.user_id 
+
 
  ====================                       DAY 10 ()
 
