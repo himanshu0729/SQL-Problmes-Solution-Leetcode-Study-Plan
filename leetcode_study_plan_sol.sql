@@ -271,18 +271,52 @@ and year(o.order_date) = '2019'
 group by u.user_id 
 
 
-#Be careful if you use where in join here you would lose the Null occurence of orders thus zero number of orders won't show up in the final table.
-
-#The upper one is wrong because although left join table first but the where clause will eliminate the 2019 orders. i.e. no 3 and 4 on the output.
-
-#instead the lower one is correct. the year codition in on the join clause there will have no orders for buyer 3 and 4 but since it is left join the user 3 and 4 are still in the user table.
 
 
+/*Be careful if you use where in join here you would lose the Null occurence of orders thus zero number of orders won't show up in the final table.
 
+The upper one is wrong because although left join table first but the where clause will eliminate the 2019 orders. i.e. no 3 and 4 on the output.
+
+instead the lower one is correct. the year codition in on the join clause there will have no orders for buyer 3 and 4 but since it is left join the user 3 and 4 are still in the user table.
+*/
 
  ====================                       DAY 10 ()
 
 Solution 1
+
+SELECT email AS Email 
+FROM Person 
+GROUP BY email 
+HAVING COUNT(id) > 1;
+
+USING SELF JOIN
+
+SELECT DISTINCT P1.email AS Email
+FROM Person p1 INNER JOIN Person p2
+ON p1.email = p2.email
+WHERE p1.id <> p2.id;
+
+
 Solution 2 
+
+SELECT actor_id, director_id
+FROM ActorDirector
+GROUP BY actor_id, director_id
+HAVING COUNT(*) >= 3;
+
 Solution 3 
+
+SELECT NAME, SUM(amount) AS BALANCE
+FROM Transactions INNER JOIN Users
+ON Transactions.account = Users.account
+GROUP BY Transactions.account
+HAVING BALANCE > 10000;
+
 Solution 4
+
+SELECT Product.product_id, Product.product_name
+FROM Product INNER JOIN Sales
+ON Product.product_id = Sales.product_id
+GROUP BY Product.product_id
+HAVING MAX(Sales.sale_date)  <= '2019-03-31' AND 
+MIN(Sales.sale_date)  >= '2019-01-01';
